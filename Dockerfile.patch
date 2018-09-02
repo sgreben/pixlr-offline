@@ -1,0 +1,3 @@
+FROM alpine:3.7
+RUN apk add --no-cache rdiff-backup curl
+ENTRYPOINT [ "/bin/sh", "-c" ]

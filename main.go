@@ -13,7 +13,7 @@ import (
 	"github.com/skratchdot/open-golang/open"
 )
 
-//go:generate make static/editor.swf
+//go:generate make static/patched
 
 var config struct {
 	Listen       string

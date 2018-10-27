@@ -4,6 +4,7 @@ APP      := pixlr-offline
 PACKAGES := $(shell go list -f {{.Dir}} ./...)
 GOFILES  := $(addsuffix /*.go,$(PACKAGES))
 GOFILES  := $(wildcard $(GOFILES))
+VANILLA  := aHR0cHM6Ly9tZWdhLm56LyMhc01jVXpTNWIhb1laU2NXbFVac3RMVjByRWpyZ1pFM3VsRlZXSnJjUEt5RUFUOERHV2FlVQ==
 
 .PHONY: clean docker binary
 
@@ -20,9 +21,8 @@ docker: $(GOFILES) Dockerfile static/patched
 
 static/patched: Dockerfile.patch
 	docker build -t "$(APP)-patch" -f Dockerfile.patch .
-	docker run --rm -i -a stdout -a stderr -v "$$PWD/static":"/static" -w /static "$(APP)-patch" "\
-		>/vanilla curl -sSL https://pixlr.com/editor/editor-$(VERSION).swf && \
-		rdiff patch /vanilla delta patched"
+	docker run --rm -i -a stdout -a stderr -v "$$PWD/static":"/static" -w /static "$(APP)-patch" "$(VANILLA)" delta patched
 
 clean:
 	rm -rf bin/
+	rm -f static/patched

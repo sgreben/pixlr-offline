@@ -1,0 +1,11 @@
+#!/bin/sh -eu
+
+VANILLA_URL=$(printf "%s" "$1" | base64 -d)
+DELTA_PATH=$2
+PATCHED_PATH=$3
+VANILLA_PATH=$(mktemp)
+VANILLA_PATH_DL=${VANILLA_PATH}.dl
+megadl --path "${VANILLA_PATH}.dl" "${VANILLA_URL}" >/dev/null
+mv "$VANILLA_PATH_DL" "$VANILLA_PATH"
+rdiff patch "${VANILLA_PATH}" "${DELTA_PATH}" "${PATCHED_PATH}"
+rm -f "$VANILLA_PATH"

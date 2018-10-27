@@ -19,6 +19,9 @@ bin/$(APP): $(GOFILES) static/patched
 docker: $(GOFILES) Dockerfile static/patched
 	docker build -t "$(APP)":latest -t "$(APP)":$(VERSION) -f Dockerfile .
 
+bin/$(APP)-$(VERSION)-docker-image.tar.gz: docker
+	docker save "$(APP)":$(VERSION) -o "bin/$(APP)-$(VERSION)-docker-image.tar.gz"
+
 static/patched: Dockerfile.patch
 	docker build -t "$(APP)-patch" -f Dockerfile.patch .
 	docker run --rm -i -a stdout -a stderr -v "$$PWD/static":"/static" -w /static "$(APP)-patch" "$(VANILLA)" delta patched

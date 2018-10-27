@@ -1,2 +1,5 @@
 *
 !/patch
+!/vendor
+!/main.go
+!/static
